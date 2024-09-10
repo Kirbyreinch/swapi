@@ -1,0 +1,48 @@
+.App-logo{
+  width: 150px;
+  height: 150px;
+  }
+
+.App-header {
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(5px + 2vmin);
+  color: white;
+}
+
+.h1-header{
+  color: yellow;
+}
+
+.h2-header{
+  color: rgb(136, 135, 135);
+  text-align: center;
+}
+
+
+.App-body{
+  background-color: #242323;
+}
+
+
+.App-characters-bar{
+  color: rgb(172, 170, 170);
+  text-align: center;
+}
+
+
+body{
+  background-color: #242323;
+}
+
+.table-char,th, td{
+margin-top: 1cm;  
+margin-left: 6cm;
+text-align: center;
+color: aliceblue;
+border: 1px solid rgb(255, 255, 255);
+
+}
