@@ -25,4 +25,3 @@ root.render(
 
 reportWebVitals();
 
-//fetch normalito
