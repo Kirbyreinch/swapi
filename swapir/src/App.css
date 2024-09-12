@@ -33,6 +33,12 @@
   text-align: center;
 }
 
+.App-characters-bar,input{
+  color: rgb(172, 170, 170);
+  text-align: center;
+  border-radius: 15%;
+  
+}
 
 body{
   background-color: #242323;
@@ -45,4 +51,12 @@ text-align: center;
 color: aliceblue;
 border: 1px solid rgb(255, 255, 255);
 
+}
+
+.table-movies{
+  margin-top: 1cm;  
+margin-left: 6cm;
+text-align: center;
+color: aliceblue;
+border: 1px solid rgb(255, 255, 255);
 }
