@@ -50,13 +50,17 @@ margin-left: 6cm;
 text-align: center;
 color: aliceblue;
 border: 1px solid rgb(255, 255, 255);
+text-align: left;
 
 }
 
 .table-movies{
-  margin-top: 1cm;  
+margin-top: 1cm;  
 margin-left: 6cm;
 text-align: center;
 color: aliceblue;
 border: 1px solid rgb(255, 255, 255);
 }
+
+
+
