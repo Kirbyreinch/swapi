@@ -15,18 +15,16 @@ const [films, setFilms] = useState([]);
 const [vehicles, setVehicles]= useState([]);
 const [homeworld, setHomeworld]= useState('');
 const [mostrar, setmostrar]= useState(false);
-const [ocultar, setocultar]= useState(true);
 
 
-//Peticion Api general
+
+//Peticion Api individual
 const fetchAllData = async() =>{
     const resp = await axios(`https://swapi.dev/api/people/?page=1`);
     const allcharacter = resp.data.results;
     setcharacters(allcharacter);
-
+    console.log(allcharacter);
   };
-  fetchAllData();
- 
 
 
 
@@ -39,17 +37,6 @@ try {
 );
 const characterData = result.data;
 setData(characterData); 
-
-
-
-if (searchQuery ==='') {
-  ocultamiento(ocultar===true); /// En proceso
-  console.log(ocultamiento());
- 
-}else{
-  ocultamiento(false);
-}
-
 
 
 
@@ -79,28 +66,16 @@ setStarships(starshipsName);
 //Peticiones homeworld
 const homeworldresponse = await axios.get(characterData.homeworld); 
 setHomeworld(homeworldresponse.data.name); 
+
 } catch (error) {
 }
 };
 
-
-//ocultat info adicional
 const muestreo = () =>{
 setmostrar(!mostrar);
 };
 
-
-
-const ocultamiento = () =>{
-  setocultar();
-  };
-
-
-
-
 return (
-
-
 <div className="App">
   <header className="App-header">
     <img src={logo} className="App-logo" alt="logo" />
@@ -114,69 +89,8 @@ return (
   </h2>
 <div className="App-characters-bar">
     <input type='text' id='character' placeholder='Enter Character name' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
-    <button class="button-74" onClick={fetchData}>Buscar</button> {}
-</div> 
-
-
-
-{ocultar &&  characters.map((char, index) => (
-  
-  <table className='table-char'>
-  <thead>
-
-  <tr>
-    <th>Nombre</th>
-    <td>{char.name}</td>
-  </tr>
-
-  <tr>
-    <th>Altura</th>
-    <td>{char.height}</td>
-  </tr>
-
-  <tr>
-    <th>Peso</th>
-    <td>{char.mass}</td>
-  </tr>
-
-  <tr>
-    <th>Color de cabello</th>
-    <td>{char.hair_color}</td>
-  </tr>
-
-  <tr>
-    <th>Color de piel</th>
-    <td>{char.skin_color}</td>
-  </tr>
-
-  <tr>
-    <th>Color de ojos</th>
-    <td>{char.eye_color}</td>
-  </tr>
-
-  <tr>
-    <th>Fecha de nacimiento</th>
-    <td>{char.birth_year}</td>
-  </tr>
-
-  <tr>
-    <th>Género</th>
-    <td>{char.gender}</td>
-  </tr>
-
-  <tr>
-    <th>Planeta de nacimiento</th>
-    <td>{homeworld}</td>
-  </tr>
-
-
-</thead>
-</table>
-
-))
-}
-
-
+    <button class="button-74" onClick={fetchAllData}>Buscar</button> {}
+</div>
 
 
 
