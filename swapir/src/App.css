@@ -34,38 +34,39 @@
 }
 
 .App-characters-bar,input{
-  color: rgb(172, 170, 170);
+  color: rgb(0, 0, 0);
   text-align: center;
   border-radius: 15%;
-  
+  font-size: 16px;
 }
+
+
 
 body{
   background-color: #242323;
 }
 
 .table-char,th, td{
-margin-top: 1cm;  
-margin-left: 14cm;
+margin-top: 0.9%;  
+margin-left: 40%;
 text-align: center;
-color: aliceblue;
-border: 1px solid rgb(255, 255, 255);
+color: rgb(206, 206, 206);
+border: 1px solid rgb(51, 51, 51);
 text-align: left;
-
-
-
-
+background-color:  rgb(94, 94, 94);
 
 }
 
 
-.table-movies{
-  margin-top: 0.5cm;  
-  margin-left: 10cm;
+.table-movies {
+  margin-top: 5%;
+  margin-left: 5%;
   text-align: center;
   color: aliceblue;
-  border: 1px solid rgb(255, 255, 255);
-  text-align: left;
+  border: 1px solid rgb(161, 161, 161);
+}
+.table-movies th, .table-movies td {
+  vertical-align: top; 
 }
 
 
@@ -133,4 +134,39 @@ text-align: left;
     min-width: 120px;
     padding: 0 25px;
   }
+}
+
+
+
+.pagination{
+text-align: center;
+font-size: 25px;
+color: rgb(255, 255, 255);
+}
+
+
+
+
+
+
+.button-modale {
+  background-color: #8d2929;
+  border: 2px solid #302d29;
+  border-radius: 20px;
+  box-shadow: #4d4c4a 4px 4px 0 0;
+  color: #000000;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 50px;
+  line-height: 20px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  position: absolute;
+  top: 10px; 
+  right: 10px; 
 }

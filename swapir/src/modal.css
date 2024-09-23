@@ -1,0 +1,26 @@
+.modal {
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    width: 50%;
+    height: 20%;
+    background-color:rgb(94, 94, 94);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-main {
+    background: rgb(94, 94, 94);
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .display-block {
+    display: block;
+  }
+  
+  .display-none {
+    display: none;
+  }
+  
