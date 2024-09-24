@@ -31,7 +31,19 @@ const findCharacterIdByName = (name) => {
 const handleMostrar = (character) => {
   setmostrar(true);
   fetchCharacterDetails(character); // Cargar detalles del personaje
+  fetchAllData(paginactual); // Vuelve a cargar todos los personajes
 };
+
+
+// Inicio
+const handleInicio = () => {
+  setSearchQuery(''); // Limpia la barra de búsqueda
+  fetchAllData(); // Vuelve a cargar todos los personajes
+  setocultar(true); // Muestra todos los personajes
+};
+
+
+
 
 const [characterDetails, setCharacterDetails] = useState({
   films: [],
@@ -127,10 +139,10 @@ const fetchData = async () => {
 
 const ocultamiento = () => {
   if (searchQuery === '' || searchQuery === 'people') {
-    setocultar(true); 
+    setocultar(true);
   } else {
-    setocultar(false); 
-    setocultarbusqueda(true); 
+    setocultar(false);
+    setocultarbusqueda(true);
     fetchData();
   }
 };
@@ -162,6 +174,7 @@ return (
     Personajes de Star Wars
   </h2>
 <div className="App-characters-bar">
+<button className="button-74" onClick={handleInicio}>Inicio</button>
     <input type='text' id='character' placeholder='Nombre  (Ej:people/1)' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
     <button class="button-74" onClick={ocultamiento}>Buscar</button> {}
 </div> 
