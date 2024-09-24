@@ -11,22 +11,69 @@ function App() {
 
 const [data, setData] = useState({});
 const [characters, setcharacters] = useState([]);
-const [starships, setStarships] = useState([]);
 const [searchQuery, setSearchQuery] = useState(''); 
-const [films, setFilms] = useState([]);
-const [vehicles, setVehicles]= useState([]);
 const [homeworld, setHomeworld]= useState('');
-
 const [mostrar, setmostrar]= useState(false);
 const [ocultar, setocultar]= useState(true);
 const [ocultarbusqueda, setocultarbusqueda]= useState(true);
-
 const [paginactual, setpaginactual] = useState(1); // Página actual
 const [paginastotales, setpaginastotales] = useState(1); // Total de páginas
 
 
-const handleMostrar = () => setmostrar(true);
-const handleCerrar = () => setmostrar(false);
+
+
+const findCharacterIdByName = (name) => {
+  const character = characters.find(char => char.name.toLowerCase() === name.toLowerCase());
+  return character ? `people/${character.url.split('/')[5]}` : null;
+};
+
+
+const handleMostrar = (character) => {
+  setmostrar(true);
+  fetchCharacterDetails(character); // Cargar detalles del personaje
+  fetchAllData(paginactual); // Vuelve a cargar todos los personajes
+};
+
+
+// Inicio
+const handleInicio = () => {
+  setSearchQuery(''); // Limpia la barra de búsqueda
+  fetchAllData(); // Vuelve a cargar todos los personajes
+  setocultar(true); // Muestra todos los personajes
+};
+
+
+
+
+const [characterDetails, setCharacterDetails] = useState({
+  films: [],
+  vehicles: [],
+  starships: [],
+  homeworld: '',
+});
+
+
+// Datos adicionales  
+
+const fetchCharacterDetails = async (character) => {
+  try {
+    const filmRequests = character.films?.map(filmUrl => axios.get(filmUrl)) || [];
+    const filmResponses = await Promise.all(filmRequests);
+    const films = filmResponses.map(film => film.data.title);
+
+    const vehiclesRequests = character.vehicles?.map(vehicleUrl => axios.get(vehicleUrl)) || [];
+    const vehiclesResponses = await Promise.all(vehiclesRequests);
+    const vehicles = vehiclesResponses.map(vehicle => vehicle.data.name);
+
+    const starshipsRequests = character.starships?.map(starshipUrl => axios.get(starshipUrl)) || [];
+    const starshipsResponses = await Promise.all(starshipsRequests);
+    const starships = starshipsResponses.map(starship => starship.data.name);
+
+    setCharacterDetails({ films, vehicles, starships, homeworld: character.homeworld });
+  } catch (error) {
+    console.error("Error al obtener detalles del personaje:", error);
+  }
+};
 
 
 //Peticion Api general
@@ -54,73 +101,51 @@ const fetchAllData = async (page = 1) => {
   }
 };
 
+
+
+
 useEffect(() => { //Se ejecuta una vez??
-  fetchAllData(paginactual);
+  fetchAllData(paginactual);//Paginar
 }, [paginactual]);
 
 
-
-
-//Peticion Api individual
+// Personajes por busqueda ahora por nombre
 const fetchData = async () => {
-try {
-    const result = await axios(
-    `https://swapi.dev/api/${searchQuery}`
-);
-const characterData = result.data;
-setData(characterData); 
+  try {
+    let characterId = searchQuery;
 
+    // Verificar si es un nombre y buscar el ID
+    if (!characterId.startsWith('people/')) {
+      const foundId = findCharacterIdByName(searchQuery);
+      characterId = foundId ? foundId : null;
+    }
 
-//Peticiones films
-const filmRequests = characterData.films.map(filmUrl => axios.get(filmUrl));
-const filmResponses = await Promise.all(filmRequests); 
-const filmTitles = filmResponses.map(film => film.data.title); 
-setFilms(filmTitles); 
+    if (characterId) {
+      const result = await axios(`https://swapi.dev/api/${characterId}`);
+      const characterData = result.data;
+      setData(characterData);
+      
 
-
-//Peticiones vehiculos
-const vehiclesrequest = characterData.vehicles.map(vehiclesUrl => axios.get(vehiclesUrl));
-const vehiclesresponse = await Promise.all(vehiclesrequest); 
-const vehiclesName = vehiclesresponse.map(vehicle => vehicle.data.name); 
-setVehicles(vehiclesName); 
-
-
-//Peticiones naves
-const starshipsrequest = characterData.starships.map(starshipsUrl => axios.get(starshipsUrl));
-const starshipsresponse = await Promise.all(starshipsrequest); 
-const starshipsName = starshipsresponse.map(starship => starship.data.name); 
-setStarships(starshipsName); 
-
-
-
-//Peticiones homeworld
-const homeworldresponse = await axios.get(characterData.homeworld); 
-setHomeworld(homeworldresponse.data.name); 
-} catch (error) {
-
-  setocultarbusqueda(false); 
-}
-
+      const homeworldResponse = await axios.get(characterData.homeworld);
+      setHomeworld(homeworldResponse.data.name);
+    } else {
+      setocultarbusqueda(false); 
+    }
+  } catch (error) {
+    setocultarbusqueda(false);
+    console.error("Error al buscar el personaje:", error);
+  }
 };
 
-
-
-
-const ocultamiento = () =>{
-  if (searchQuery === '') {
-    console.log(searchQuery);
-    console.log('if');
-    setocultar(true); 
-    } else {
-      console.log('else');
-      console.log(searchQuery);
-      setocultar(false); 
-      setocultarbusqueda(true); 
-      fetchData();
-
-    }
-  };
-
+const ocultamiento = () => {
+  if (searchQuery === '' || searchQuery === 'people') {
+    setocultar(true);
+  } else {
+    setocultar(false);
+    setocultarbusqueda(true);
+    fetchData();
+  }
+};
 
 // Cambiar de página
 const nextPage = () => {
@@ -133,8 +158,10 @@ const nextPage = () => {
   setpaginactual(prevPage => prevPage - 1);
   }
   };
-return (
 
+  
+  // HTML
+return (
 <div className="App">
   <header className="App-header">
     <img src={logo} className="App-logo" alt="logo" />
@@ -147,6 +174,7 @@ return (
     Personajes de Star Wars
   </h2>
 <div className="App-characters-bar">
+<button className="button-74" onClick={handleInicio}>Inicio</button>
     <input type='text' id='character' placeholder='Nombre  (Ej:people/1)' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
     <button class="button-74" onClick={ocultamiento}>Buscar</button> {}
 </div> 
@@ -165,6 +193,9 @@ return (
 )}
 
 
+
+
+{/* Todos los Personajes  */}
 
     {ocultar && characters.map((char, index) => (
       <table className='table-char' key={index}>
@@ -205,10 +236,17 @@ return (
             <th>Planeta de nacimiento</th>
             <td>{char.homeworld}</td>
           </tr>
+
+          <tr>
+    <th>informacion Adicional</th>
+    <td><button className="button-54" onClick={() => handleMostrar(char)}>Mostrar</button></td>
+  </tr>
         </thead>
       </table>
     ))}
   
+
+{/* No Personaje en busqueda */}
 
 {!ocultarbusqueda && !ocultar && data.name && (
   <table className='table-char'>
@@ -278,7 +316,9 @@ return (
 
   <tr>
     <th>informacion Adicional</th>
-    <td><button  class="button-54" onClick={handleMostrar}>Mostrar </button></td>
+    <td>
+  <button className="button-54" onClick={() => handleMostrar(data)}>Mostrar</button>
+</td>
   </tr>
 </thead>
 </table>
@@ -286,49 +326,37 @@ return (
 
 
 
+{/* Mostrar en Ventana Modal */}
 
-
-
-<Modal show={mostrar} handleClose={handleCerrar}>  {/* Ventana Modal?*/}
+<Modal show={mostrar} handleClose={() => setmostrar(false)}>
   <table className='table-movies'>
     <thead>
       <tr>
         <th>Películas Relacionadas</th>
-        <th>Vehiculos Relacionados</th>
-        <th>Naves relacionadas</th>
+        <th>Vehículos Relacionados</th>
+        <th>Naves Relacionadas</th>
       </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
       <tr>
-      <td>
-      <tr>
-      {films.map((film, index) => (
-      <tr key={index}>
-      {index + 1} - {film}
+        <td>
+          {characterDetails.films.map((film, index) => (
+            <div key={index}>{index + 1} - {film}</div>
+          ))}
+        </td>
+        <td>
+          {characterDetails.vehicles.map((vehicle, index) => (
+            <div key={index}>{index + 1} - {vehicle}</div>
+          ))}
+        </td>
+        <td>
+          {characterDetails.starships.map((starship, index) => (
+            <div key={index}>{index + 1} - {starship}</div>
+          ))}
+        </td>
       </tr>
-))}
-
-      </tr>
-      </td>
-      <td>
-      {vehicles.map((vehicle, indexs) => (
-      <tr key={indexs}>
-      {indexs + 1} - {vehicle}
-      </tr>
-))}
-      </td>
-      <td>
-
-     {starships.map((starship, indexes) => (
-     <tr key={indexes}>
-     {indexes + 1} - {starship}
-     </tr>
-))}
-</td>
-</tr>
-
-</tbody>
-</table>
+    </tbody>
+  </table>
 </Modal>
 </div>
 </div>
